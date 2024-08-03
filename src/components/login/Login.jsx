@@ -1,15 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 //import Layout from "../Layout/Layout.jsx";
-import "./Login.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import { API } from "../../config/axios";
 //import { useAuth } from '../../context/auth';
-
+import "./Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +32,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/api/v1/auth/login", {
+      const res = await axios.post("/api/v1/auth/login", {
         email,
         password,
       });

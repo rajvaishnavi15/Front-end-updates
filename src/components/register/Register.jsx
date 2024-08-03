@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import "./Register.css";
 import {
   FaUser,
@@ -9,7 +9,6 @@ import {
 } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { API } from "../../config/axios";
 
@@ -18,13 +17,13 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [addressType, setAddressType] = useState("");
+  const [role, setRole] = useState("");
   const [userType, setUserType] = useState("");
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
 
-  const handleAddressTypeChange = (e) => {
-    setAddressType(e.target.value);
+  const handleRoleChange = (e) => {
+    setRole(e.target.value);
     if (e.target.value !== "user") {
       setUserType("");
     }
@@ -42,7 +41,7 @@ const Register = () => {
         email,
         password,
         phone,
-        addressType,
+        role,
         userType,
         answer,
       });
@@ -56,7 +55,7 @@ const Register = () => {
       console.log(error);
       toast.error("Something went wrong");
     }
-    console.log(name, email, password, phone, addressType, userType, answer);
+    console.log(name, email, password, phone, role, userType, answer);
   };
 
   return (
@@ -118,13 +117,13 @@ const Register = () => {
           <div className="mt-10 flex items-center">
             <FaRegAddressCard className="ml-3 text-white" />
             <select
-              id="addressType"
-              value={addressType}
-              onChange={handleAddressTypeChange}
+              id="role"
+              value={role}
+              onChange={handleRoleChange}
               className="w-full h-8 bg-black border-b border-white text-[#3CBDB1] placeholder:text-[#3CBDB1] placeholder:text-sm placeholder:tracking-wider pl-2 text-lg outline-none"
             >
               <option value="" disabled className="text-[#3CBDB1]">
-                Select Address Type
+                Select Role
               </option>
               <option value="home" className="text-[#3CBDB1]">
                 Admin
@@ -137,7 +136,7 @@ const Register = () => {
               </option>
             </select>
           </div>
-          {addressType === "user" && (
+          {role === "user" && (
             <div className="mt-10 flex items-center">
               <FaSchool className="ml-3 text-white" />
               <select
