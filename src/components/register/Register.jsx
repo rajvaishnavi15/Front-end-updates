@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import "./Register.css";
 import {
   FaUser,
@@ -9,11 +9,11 @@ import {
 } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { API } from "../../config/axios";
 
 const Register = () => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -33,11 +33,21 @@ const Register = () => {
     setUserType(e.target.value);
   };
 
+  const resetFields = () => {
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setPhone("");
+    setRole("");
+    setUserType("");
+    setAnswer("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent refreshing of the page while submitting the form
     try {
       const res = await API.post("/api/v1/auth/register", {
-        name,
+        username,
         email,
         password,
         phone,
@@ -45,17 +55,19 @@ const Register = () => {
         userType,
         answer,
       });
-      if (res.data.success) {
-        toast.success(res.data.message);
-        navigate("/login");
-      } else {
-        toast.error(res.data.message);
+      console.log(res.data);
+      if (res.data) {
+        resetFields();
+        toast.success(res.data);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error(error.response.data);
     }
-    console.log(name, email, password, phone, role, userType, answer);
+    // console.log(username, email, password, phone, role, userType, answer);
   };
 
   return (
@@ -74,8 +86,8 @@ const Register = () => {
               placeholder="Username"
               className="w-full h-8 bg-transparent border-b border-white text-white placeholder:text-[#3CBDB1] placeholder:text-sm placeholder:tracking-wider pl-2 text-lg outline-none"
               autoComplete="off"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
@@ -125,10 +137,10 @@ const Register = () => {
               <option value="" disabled className="text-[#3CBDB1]">
                 Select Role
               </option>
-              <option value="home" className="text-[#3CBDB1]">
+              <option value="admin" className="text-[#3CBDB1]">
                 Admin
               </option>
-              <option value="office" className="text-[#3CBDB1]">
+              <option value="content creator" className="text-[#3CBDB1]">
                 Content Creator
               </option>
               <option value="user" className="text-[#3CBDB1]">

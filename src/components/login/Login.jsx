@@ -1,18 +1,13 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-//import Layout from "../Layout/Layout.jsx";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
-//import { useAuth } from '../../context/auth';
 import "./Login.css";
+import { API } from "../../config/axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //const [auth, setAuth] = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const handleFocus = (e) => {
@@ -32,26 +27,23 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/v1/auth/login", {
+      const res = await API.post("/api/v1/auth/login", {
         email,
         password,
       });
-      navigate("/");
-      /*if (res.data.success) {
-        toast.success(res.data && res.data.message);
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
-        
-      } else {
-        toast.error(res.data.message);
-      }*/
+
+      console.log(res.data);
+
+      if (res.data) {
+        localStorage.setItem("token", res.data);
+        toast.success("Login success");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error(error.response.data);
     }
   };
 
@@ -93,12 +85,10 @@ const Login = () => {
               </button>
             </div>
             <div className="fotter">
-              <a href="#" onClick={() => navigate("/forget-password")}>
+              <a onClick={() => navigate("/forgot-password")}>
                 Forgot Password ?
               </a>
-              <a href="#" onClick={() => navigate("/register")}>
-                Register
-              </a>
+              <a onClick={() => navigate("/register")}>Register</a>
             </div>
           </div>
         </div>

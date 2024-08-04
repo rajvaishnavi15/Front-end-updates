@@ -1,21 +1,22 @@
 import { FaLock, FaSchool } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ForgotPassword.css";
+import { API } from "../../config/axios";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
+
   //form funtion
   const handleSubmit = async (e) => {
     e.preventDefault(); //to prevent refreshing of the page while submitting the register form
     try {
-      const res = await axios.post("/api/v1/auth/forget-password", {
+      const res = await API.post("/api/v1/auth/forgot-password", {
         email,
         newPassword,
         answer,
@@ -23,12 +24,10 @@ const ForgotPassword = () => {
       if (res.data.success) {
         toast.success(res.data && res.data.message);
         navigate("/login");
-      } else {
-        toast.error(res.data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error(error.response.data);
     }
     console.log(email, newPassword);
   };
